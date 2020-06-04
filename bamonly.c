@@ -437,8 +437,16 @@ int find_mei_bam( parameters *params, char *chromosome_name, char** mei_subclass
 
 	/* Check if the right end is inside the annotated transposon */
 	repeat_item = sonic_is_mobile_element( params->this_sonic, chromosome_name, start, end, params->mei );
-	if( repeat_item == NULL)
+	if( repeat_item == NULL) {
+		fprintf( stderr, "\n NOTMEI\n");
 		return NOTMEI;
+	}
+	else {
+		fprintf( stderr, "\n strand: %s, repeat_type: %s, repeat_class: %s, repeat_start: %d, 
+			repeat_end: %d, mei_code: %d\n", repeat_item->strand, repeat_item->repeat_type,
+			repeat_item->repeat_class, repeat_item->repeat_start, repeat_item->repeat_end,
+			repeat_item->mei_code);
+	}
 
 	(*mei_subclass) = NULL;
 	set_str( mei_subclass, repeat_item->repeat_type);
@@ -452,7 +460,7 @@ int find_mei_bam( parameters *params, char *chromosome_name, char** mei_subclass
 		return_type = repeat_item->mei_code * 2;
 	else
 		return_type = (repeat_item->mei_code * 2) + 1;
-
+	fprintf( stderr, "mei_type: %d\n", mei_type);
 	return return_type;
 }
 
