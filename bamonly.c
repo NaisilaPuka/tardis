@@ -738,53 +738,53 @@ void bamonly_vh_clustering( bam_info** in_bams, parameters *params)
 		for( i = 0; i < MaxClusterCount; i++)
 			clusters_all[i] = NULL;
 
-		/* Deletion */
-		fprintf( stderr, "\nPreparing Deletion clusters");
-		vh_initializeReadMapping_Deletion( params->this_sonic, chr_index);
-		fprintf( stderr, "..");
-		fflush( stderr);
-		vh_createDeletionClusters( params->this_sonic->chromosome_lengths[chr_index]);
-		fprintf( stderr, "..");
-		fflush( stderr);
-		vh_finalizeReadMapping( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
-		fprintf( stderr, "..");
-		fflush( stderr);
+		// /* Deletion */
+		// fprintf( stderr, "\nPreparing Deletion clusters");
+		// vh_initializeReadMapping_Deletion( params->this_sonic, chr_index);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
+		// vh_createDeletionClusters( params->this_sonic->chromosome_lengths[chr_index]);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
+		// vh_finalizeReadMapping( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
 
-		/* Inversion */
-		fprintf( stderr, "\nPreparing Inversion clusters");
-		vh_initializeReadMapping_Inversion( params->this_sonic, chr_index);
-		fprintf( stderr, "..");
-		fflush( stderr);
-		vh_createInversionClusters( params->this_sonic->chromosome_lengths[chr_index]);
-		fprintf( stderr, "..");
-		fflush( stderr);
-		vh_finalizeReadMapping( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
-		fprintf( stderr, "..");
-		fflush( stderr);
+		// /* Inversion */
+		// fprintf( stderr, "\nPreparing Inversion clusters");
+		// vh_initializeReadMapping_Inversion( params->this_sonic, chr_index);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
+		// vh_createInversionClusters( params->this_sonic->chromosome_lengths[chr_index]);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
+		// vh_finalizeReadMapping( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
 
-		/* Insertion */
-		fprintf( stderr, "\nPreparing Insertion clusters");
-		vh_initializeReadMapping_Insertion( params->this_sonic, chr_index);
-		fprintf( stderr, "..");
-		fflush( stderr);
-		vh_createInsertionClusters( params->this_sonic->chromosome_lengths[chr_index]);
-		fprintf( stderr, "..");
-		fflush( stderr);
-		vh_finalizeReadMapping( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
-		fprintf( stderr, "..");
-		fflush( stderr);
+		// /* Insertion */
+		// fprintf( stderr, "\nPreparing Insertion clusters");
+		// vh_initializeReadMapping_Insertion( params->this_sonic, chr_index);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
+		// vh_createInsertionClusters( params->this_sonic->chromosome_lengths[chr_index]);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
+		// vh_finalizeReadMapping( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
 
-		/* Tandem Duplication */
-		fprintf( stderr, "\nPreparing Tandem Duplication clusters");
-		vh_initializeReadMapping_TDup( params->this_sonic, chr_index);
-		fprintf( stderr, "..");
-		fflush( stderr);
-		vh_createTDupClusters( params->this_sonic->chromosome_lengths[chr_index]);
-		fprintf( stderr, "..");
-		fflush( stderr);
-		vh_finalizeReadMapping( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
-		fprintf( stderr, "..");
-		fflush( stderr);
+		// /* Tandem Duplication */
+		// fprintf( stderr, "\nPreparing Tandem Duplication clusters");
+		// vh_initializeReadMapping_TDup( params->this_sonic, chr_index);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
+		// vh_createTDupClusters( params->this_sonic->chromosome_lengths[chr_index]);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
+		// vh_finalizeReadMapping( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
+		// fprintf( stderr, "..");
+		// fflush( stderr);
 
 		/* Mei */
 		if( params->no_mei == 0)
@@ -801,54 +801,54 @@ void bamonly_vh_clustering( bam_info** in_bams, parameters *params)
 			fflush( stderr);
 		}
 
-		/* NumT */
-		if( ( strcmp( params->this_sonic->chromosome_names[chr_index], "MT") != 0)
-				&& ( strcmp( params->this_sonic->chromosome_names[chr_index], "chrM") != 0))
-		{
-			fprintf( stderr, "\nPreparing NUMT clusters");
-			initializeReadMapping_NUMT( in_bams, params, chr_index);
-			fprintf( stderr, "..");
-			fflush( stderr);
-			NUMTCluster_Region( params, chr_index);
-			fprintf( stderr, "..");
-			fflush( stderr);
-			vh_finalizeReadMapping_NUMT( params->this_sonic->chromosome_lengths[chr_index]);
-			fprintf( stderr, "..");
-			fflush( stderr);
-		}
+		// /* NumT */
+		// if( ( strcmp( params->this_sonic->chromosome_names[chr_index], "MT") != 0)
+		// 		&& ( strcmp( params->this_sonic->chromosome_names[chr_index], "chrM") != 0))
+		// {
+		// 	fprintf( stderr, "\nPreparing NUMT clusters");
+		// 	initializeReadMapping_NUMT( in_bams, params, chr_index);
+		// 	fprintf( stderr, "..");
+		// 	fflush( stderr);
+		// 	NUMTCluster_Region( params, chr_index);
+		// 	fprintf( stderr, "..");
+		// 	fflush( stderr);
+		// 	vh_finalizeReadMapping_NUMT( params->this_sonic->chromosome_lengths[chr_index]);
+		// 	fprintf( stderr, "..");
+		// 	fflush( stderr);
+		// }
 
-		if( params->no_interdup == 0)
-		{
-			/* Interspersed Direct Duplication */
-			fprintf( stderr, "\nPreparing Interspersed Duplication clusters");
-			for( interdup_location = 0; interdup_location <= RIGHTSIDE; interdup_location++)
-			{
-				vh_initializeReadMapping_InterDup( params->this_sonic, chr_index, interdup_location);
-				fprintf( stderr, ".");
-				fflush( stderr);
-				vh_createInterDupClusters( params->this_sonic->chromosome_lengths[chr_index], interdup_location);
-				fprintf( stderr, ".");
-				fflush( stderr);
-				vh_finalizeReadMapping_InterDup( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
-				fprintf( stderr, ".");
-				fflush( stderr);
-			}
+		// if( params->no_interdup == 0)
+		// {
+		// 	/* Interspersed Direct Duplication */
+		// 	fprintf( stderr, "\nPreparing Interspersed Duplication clusters");
+		// 	for( interdup_location = 0; interdup_location <= RIGHTSIDE; interdup_location++)
+		// 	{
+		// 		vh_initializeReadMapping_InterDup( params->this_sonic, chr_index, interdup_location);
+		// 		fprintf( stderr, ".");
+		// 		fflush( stderr);
+		// 		vh_createInterDupClusters( params->this_sonic->chromosome_lengths[chr_index], interdup_location);
+		// 		fprintf( stderr, ".");
+		// 		fflush( stderr);
+		// 		vh_finalizeReadMapping_InterDup( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
+		// 		fprintf( stderr, ".");
+		// 		fflush( stderr);
+		// 	}
 
-			/* Interspersed Inverted Duplication */
-			fprintf( stderr, "\nPreparing Interspersed Duplication (Inverted) clusters");
-			for( invdup_location = 0; invdup_location <= RIGHTSIDE; invdup_location++)
-			{
-				vh_initializeReadMapping_InvDup( params->this_sonic, chr_index, invdup_location);
-				fprintf( stderr, ".");
-				fflush( stderr);
-				vh_createInvDupClusters( params->this_sonic->chromosome_lengths[chr_index], invdup_location);
-				fprintf( stderr, ".");
-				fflush( stderr);
-				vh_finalizeReadMapping_InvDup( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
-				fprintf( stderr, ".");
-				fflush( stderr);
-			}
-		}
+		// 	/* Interspersed Inverted Duplication */
+		// 	fprintf( stderr, "\nPreparing Interspersed Duplication (Inverted) clusters");
+		// 	for( invdup_location = 0; invdup_location <= RIGHTSIDE; invdup_location++)
+		// 	{
+		// 		vh_initializeReadMapping_InvDup( params->this_sonic, chr_index, invdup_location);
+		// 		fprintf( stderr, ".");
+		// 		fflush( stderr);
+		// 		vh_createInvDupClusters( params->this_sonic->chromosome_lengths[chr_index], invdup_location);
+		// 		fprintf( stderr, ".");
+		// 		fflush( stderr);
+		// 		vh_finalizeReadMapping_InvDup( params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
+		// 		fprintf( stderr, ".");
+		// 		fflush( stderr);
+		// 	}
+		// }
 
 		fprintf( stderr, "\n");
 		findUniqueReads( in_bams, params, outputread);
