@@ -459,7 +459,7 @@ int find_mei_bam( parameters *params, char *chromosome_name, char** mei_subclass
 		return_type = repeat_item->mei_code * 2;
 	else
 		return_type = (repeat_item->mei_code * 2) + 1;
-	fprintf( stderr, "mei_type: %d\n", repeat_item->mei_type);
+	fprintf( stderr, "mei_type: %d\n", return_type);
 	return return_type;
 }
 
