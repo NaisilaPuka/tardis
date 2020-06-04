@@ -436,7 +436,7 @@ int find_mei_bam( parameters *params, char *chromosome_name, char** mei_subclass
 	sonic_repeat *repeat_item;
 
 	/* Check if the right end is inside the annotated transposon */
-	fprintf( stderr, "\n Checking chromosome %s with start %d and end %d", chromosome_name, start, end);
+	fprintf( stderr, "\n Checking chromosome %s with start %d and end %d and length %d", chromosome_name, start, end, end - start);
 	repeat_item = sonic_is_mobile_element( params->this_sonic, chromosome_name, start, end, params->mei );
 	if( repeat_item == NULL) {
 		fprintf( stderr, "\n NOTMEI\n");
