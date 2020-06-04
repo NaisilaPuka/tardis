@@ -787,6 +787,7 @@ void bamonly_vh_clustering( bam_info** in_bams, parameters *params)
 		// fflush( stderr);
 
 		/* Mei */
+		printf("11");
 		if( params->no_mei == 0)
 		{
 			fprintf( stderr, "\nPreparing MEI clusters");
@@ -800,6 +801,7 @@ void bamonly_vh_clustering( bam_info** in_bams, parameters *params)
 			fprintf( stderr, "..");
 			fflush( stderr);
 		}
+		printf("12");
 
 		// /* NumT */
 		// if( ( strcmp( params->this_sonic->chromosome_names[chr_index], "MT") != 0)
@@ -852,14 +854,15 @@ void bamonly_vh_clustering( bam_info** in_bams, parameters *params)
 
 		fprintf( stderr, "\n");
 		findUniqueReads( in_bams, params, outputread);
+		printf("13");
 
 		/* Free the mappings and libraries */
 		free_mappings( in_bams, params);
 		free_libraries();
-
+		printf("14");
 		/* Apply Set-Cover */
 		vh_setcover( in_bams, params, fpVcf);
-
+		printf("15");
 		total_sv += sv_count;
 		total_sv_lowqual += sv_lowqual_count;
 
