@@ -39,6 +39,17 @@ typedef struct _bam_info
 	struct library_properties** libraries; /* each library_properties struct holds statistical/other info */
 } bam_info;
 
+typedef struct _exon_info
+{
+	char * gene_id;
+	char * transcript_id;
+	char * chr;
+	int start;
+	int end;
+  	int strand; /*0 forward, 1 reverse*/
+  	int exon_code;
+} exon_info;
+
 typedef struct bam_alignment_region
 {
 	char* read_name;

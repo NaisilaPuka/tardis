@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <time.h>
 #include "common.h"
 #include "cmdline.h"
@@ -17,6 +19,10 @@
 
 FILE *logFile = NULL;
 
+#define MAXCHAR 10000
+#define EXONS 750993
+#define TOKENS 11
+
 int main( int argc, char** argv)
 {
 	bam_info** in_bams;
@@ -29,11 +35,22 @@ int main( int argc, char** argv)
 	struct tm * timeinfo;
 	char *log_file_path;
 
+	/* For loading exons from refFlat.txt */
+	FILE *fp;
+	char str[MAXCHAR];
+	char *saveptr1, *saveptr2;
+	char* filename;
+	char * start;
+	char * end;
+	exon_info **in_exons;
+	char ** tokens;
+	int this_exon_code;
+	/**/
+
 	time ( &rawtime);
 	timeinfo = localtime( &rawtime);
 
 	print_quote();
-
 
 	/* Set program parameters */
 	init_params( &params);
@@ -97,6 +114,70 @@ int main( int argc, char** argv)
 		load_bam( params, cfg, in_bams[i], params->bam_file_list[i], params->alt_mapping, i, params->ref_genome);
 	}
 
+	/* Load genes */
+	/* For loading exons from refFlat.txt */
+	filename = "refFlat.txt";
+	fp = fopen(filename, "r");
+	if (fp == NULL){
+		printf("Could not open file %s",filename);
+	}
+	else {
+		in_exons = ( exon_info**) getMem( (EXONS) * sizeof( exon_info*));
+		tokens = (char **) malloc((TOKENS) * sizeof(char *));
+		this_exon_code = 0;
+		while (fgets(str, MAXCHAR, fp) != NULL) {
+			int i = 0;
+			char * token = strtok(str, "	");
+
+	   		// loop through the string to extract all other tokens
+			while( token != NULL ) {
+				set_str( &(tokens[i]), token);
+
+				if(i==10) {
+
+					start = strtok_r(tokens[9], ",", &saveptr1);
+					end = strtok_r(tokens[10], ",", &saveptr2);
+	   				
+					for(int j = 0; j < atoi(tokens[8]); j++)
+					{
+						in_exons[this_exon_code] = ( exon_info*) getMem( sizeof( exon_info));
+
+						in_exons[this_exon_code]->gene_id = NULL;
+						set_str( &(in_exons[this_exon_code]->gene_id), tokens[0]);
+
+						in_exons[this_exon_code]->transcript_id = NULL;
+						set_str( &(in_exons[this_exon_code]->transcript_id), tokens[1]);
+
+						in_exons[this_exon_code]->chr = NULL;
+						set_str( &(in_exons[this_exon_code]->chr), tokens[2]);
+						
+						in_exons[this_exon_code]->start = atoi(start);
+						
+						in_exons[this_exon_code]->end = atoi(end);
+						
+						in_exons[this_exon_code]->exon_code = this_exon_code;
+						
+						if (strcmp(tokens[3], "+") == 0)
+							in_exons[this_exon_code]->strand = 0;
+						else
+							in_exons[this_exon_code]->strand = 1;
+
+						if(j!= atoi(tokens[8])) {
+							start = strtok_r(NULL, ",", &saveptr1);
+							end = strtok_r(NULL, ",", &saveptr2);
+						}
+						this_exon_code++;
+						
+					}
+					break;
+				}
+				i++;
+				token = strtok(NULL, "	");
+			}
+		}
+		fclose(fp);
+	}
+
 	/* Passing the flags to VH */
 	ten_x_flag = params->ten_x;
 	output_hs_flag = params->output_hs;
@@ -125,7 +206,7 @@ int main( int argc, char** argv)
 
 				fprintf( stderr, "All FASTQ files ready for remapping.\n");
 
-				/* Remap with mrFAST */
+				 Remap with mrFAST 
 				return_value = remap_mrfast( params, in_bams, cfg);
 				if( return_value != RETURN_SUCCESS)
 					return EXIT_EXTERNAL_PROG_ERROR;
