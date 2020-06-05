@@ -747,6 +747,7 @@ int mei_regions( parameters *params, char* chromosome_name)
 
 void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_index)
 {
+	fprintf(stderr, "pASSED THIS -1\n");
 	int i, mei_count;
 
 	mReads = (mei_Reads **) getMem( params->this_sonic->chromosome_lengths[chr_index] * sizeof( mei_Reads *));
