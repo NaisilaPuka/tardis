@@ -681,7 +681,7 @@ int find_mei_bam( parameters *params, exon_info*** in_exons, char *chromosome_na
 	exon_info * exon;
 
 	/* Check if the right end is inside the annotated transposon */
-	fprintf( stderr, "\n Checking chromosome %s with start %d and end %d and length %d", chromosome_name, start, end, end - start);
+	// fprintf( stderr, "\n Checking chromosome %s with start %d and end %d and length %d", chromosome_name, start, end, end - start);
 	//repeat_item = sonic_is_mobile_element( params->this_sonic, chromosome_name, start, end, params->mei );
 	exon = is_retro_cnv(chromosome_name, start, end, in_exons);
 	// if( repeat_item == NULL) {
