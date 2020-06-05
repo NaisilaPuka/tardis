@@ -689,7 +689,7 @@ int find_mei_bam( parameters *params, exon_info*** in_exons, char *chromosome_na
 	// 	return NOTMEI;
 	// }
 	if( exon == NULL) {
-		fprintf( stderr, "\n NOTMEI\n");
+		// fprintf( stderr, "\n NOTMEI\n");
 		return NOTMEI;
 	}
 	// else {
@@ -716,7 +716,7 @@ int find_mei_bam( parameters *params, exon_info*** in_exons, char *chromosome_na
 	else
 		//return_type = (repeat_item->mei_code * 2) + 1;
 		return_type = exon->exon_code + EXONS;
-	fprintf( stderr, "exon_type: %d\n", return_type);
+	// fprintf( stderr, "exon_type: %d\n", return_type);
 	return return_type;
 }
 
