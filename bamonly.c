@@ -50,9 +50,12 @@ int is_retro_cnv(const char * chromosome_name, int start, int end, exon_info** i
 		if(strcmp(in_exons[i]->chr, chr) == 0 ) 
 
 		{
-			if(start >= in_exons[i]->start && end <= in_exons[i]->end)
+			if(start >= in_exons[i]->start && end <= in_exons[i]->end) {
+				free(chr);
 				return i;
+			}
 		}
+		free(chr);
 	}
 	return -1;
 }
