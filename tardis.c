@@ -232,7 +232,7 @@ int main( int argc, char** argv)
 		{
 			fprintf( stderr, "\nTARDIS (v%s) is running in Quick Mode\n\n", TARDIS_VERSION);
 			fprintf( logFile, "(Running in quick mode)\n\n");
-			return_value = bamonly_run( params, in_bams);
+			return_value = bamonly_run( params, in_bams, in_exons);
 			if ( return_value != RETURN_SUCCESS)
 				return EXIT_EXTERNAL_PROG_ERROR;
 

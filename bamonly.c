@@ -18,6 +18,8 @@
 #include "free.h"
 #include "mappings.h"
 
+#define EXONS 750993
+
 long del_cnt_bam = 0;
 long ins_cnt_bam = 0;
 long inv_cnt_bam = 0;
@@ -33,6 +35,27 @@ long total_read_count = 0;
 
 
 char **allReadNameList;
+
+int is_retro_cnv(const char * chromosome_name, int start, int end, exon_info** in_exons) {
+ 	char str[3] = "chr";
+	for (int i = 0; i < EXONS; i++)
+	{
+		int length = 3 + strlen(chromosome_name);
+		char * chr = malloc(length * sizeof(char));
+		for(int j = 0; j < 3; j++)
+			chr[j] = str[j];
+		for(int j = 3; j < length; j++)
+			chr[j] = chromosome_name[j - 3];
+		// printf("\n%s\n", chr);
+		if(strcmp(in_exons[i]->chr, chr) == 0 ) 
+
+		{
+			if(start >= in_exons[i]->start && end <= in_exons[i]->end)
+				return i;
+		}
+	}
+	return -1;
+}
 
 void findUniqueReads( bam_info** in_bam, parameters *params, char *outputread)
 {
@@ -428,43 +451,55 @@ int find_numt_bam( bam_alignment_region* bam_align, char *chromosome_name_left, 
 }
 
 
-int find_mei_bam( parameters *params, char *chromosome_name, char** mei_subclass, char** mei_class, int start, int end, int flag)
+int find_mei_bam( parameters *params, exon_info** in_exons, char *chromosome_name, char** mei_subclass, char** mei_class, int start, int end, int flag)
 {
 	int ind, len;
 	int return_type = NOTMEI;
 
 	sonic_repeat *repeat_item;
+	int exon;
 
 	/* Check if the right end is inside the annotated transposon */
 	fprintf( stderr, "\n Checking chromosome %s with start %d and end %d and length %d", chromosome_name, start, end, end - start);
-	repeat_item = sonic_is_mobile_element( params->this_sonic, chromosome_name, start, end, params->mei );
-	if( repeat_item == NULL) {
+	//repeat_item = sonic_is_mobile_element( params->this_sonic, chromosome_name, start, end, params->mei );
+	exon = is_retro_cnv(chromosome_name, start, end, in_exons);
+	// if( repeat_item == NULL) {
+	// 	fprintf( stderr, "\n NOTMEI\n");
+	// 	return NOTMEI;
+	// }
+	if( exon == -1) {
 		fprintf( stderr, "\n NOTMEI\n");
 		return NOTMEI;
 	}
-	else {
-		fprintf( stderr, "\n strand: %d, repeat_type: %s, repeat_class: %s, repeat_start: %d, repeat_end: %d, mei_code: %d ", repeat_item->strand, repeat_item->repeat_type,
-			repeat_item->repeat_class, repeat_item->repeat_start, repeat_item->repeat_end,
-			repeat_item->mei_code);
-	}
+	// else {
+	// 	fprintf( stderr, "\n strand: %d, repeat_type: %s, repeat_class: %s, repeat_start: %d, repeat_end: %d, mei_code: %d ", repeat_item->strand, repeat_item->repeat_type,
+	// 		repeat_item->repeat_class, repeat_item->repeat_start, repeat_item->repeat_end,
+	// 		repeat_item->mei_code);
+	// }
 
 	(*mei_subclass) = NULL;
-	set_str( mei_subclass, repeat_item->repeat_type);
+	//set_str( mei_subclass, repeat_item->repeat_type);
+	set_str( mei_subclass, in_exons[exon]->transcript_id);
 
 	(*mei_class) = NULL;
-	set_str( mei_class, repeat_item->repeat_class);
+	//set_str( mei_class, repeat_item->repeat_class);
+	set_str( mei_class, in_exons[exon]->gene_id);
 
 	/* NOTE: SONIC keeps repeat_class as SINE/Alu, LINE/L1, etc. */
-	if( ( ( flag & BAM_FMREVERSE) == 0 && repeat_item->strand == SONIC_STRAND_REV)
-			|| ( ( flag & BAM_FMREVERSE) != 0 && repeat_item->strand == SONIC_STRAND_FWD))
-		return_type = repeat_item->mei_code * 2;
+	// if( ( ( flag & BAM_FMREVERSE) == 0 && repeat_item->strand == SONIC_STRAND_REV)
+	// 		|| ( ( flag & BAM_FMREVERSE) != 0 && repeat_item->strand == SONIC_STRAND_FWD))
+		//return_type = repeat_item->mei_code * 2;
+	if( ( ( flag & BAM_FMREVERSE) == 0 && in_exons[exon]->strand == SONIC_STRAND_REV)
+			|| ( ( flag & BAM_FMREVERSE) != 0 && in_exons[exon]->strand == SONIC_STRAND_FWD))
+		return_type = in_exons[exon]->exon_code;
 	else
-		return_type = (repeat_item->mei_code * 2) + 1;
-	fprintf( stderr, "mei_type: %d\n", return_type);
+		//return_type = (repeat_item->mei_code * 2) + 1;
+		return_type = in_exons[exon]->exon_code + EXONS;
+	fprintf( stderr, "exon_type: %d\n", return_type);
 	return return_type;
 }
 
-int read_mapping( library_properties *library, parameters* params, bam1_t* bam_alignment, int32_t *bamToRefIndex, bam_alignment_region* bam_align)
+int read_mapping( library_properties *library, exon_info** in_exons, parameters* params, bam1_t* bam_alignment, int32_t *bamToRefIndex, bam_alignment_region* bam_align)
 {
 	int svType, meiType = NOTMEI, numtType = NOTNUMT, left_end_id, right_end_id, i, insLen;
 	char* mei_subclass, *mei_class;
@@ -508,7 +543,7 @@ int read_mapping( library_properties *library, parameters* params, bam1_t* bam_a
 
 		if( svType != RPCONC && svType != RPUNMAPPED)
 		{
-			meiType = find_mei_bam( params, params->this_sonic->chromosome_names[right_end_id], &mei_subclass, &mei_class, bam_align->pos_right,
+			meiType = find_mei_bam( params, in_exons, params->this_sonic->chromosome_names[right_end_id], &mei_subclass, &mei_class, bam_align->pos_right,
 					bam_align->pos_right + library->read_length, bam_align->flag);
 
 			numtType = find_numt_bam( bam_align, params->this_sonic->chromosome_names[left_end_id], params->this_sonic->chromosome_names[right_end_id]);
@@ -542,7 +577,7 @@ int read_mapping( library_properties *library, parameters* params, bam1_t* bam_a
 	return -1;
 }
 
-int read_bam( bam_info* in_bam, parameters* params)
+int read_bam( bam_info* in_bam, exon_info** in_exons, parameters* params)
 {
 	/* Variables */
 	int i, chr_index_bam, return_type, ed, len, lib_index;
@@ -575,7 +610,7 @@ int read_bam( bam_info* in_bam, parameters* params)
 		else
 			lib_index = 0;
 
-		return_type = primary_mapping( in_bam, params, lib_index, bam_alignment, bamToRefIndex);
+		return_type = primary_mapping( in_bam, in_exons, params, lib_index, bam_alignment, bamToRefIndex);
 		if( return_type == -1)
 			continue;
 
@@ -605,7 +640,7 @@ int read_bam( bam_info* in_bam, parameters* params)
 }
 
 
-void bamonly_vh_clustering( bam_info** in_bams, parameters *params)
+void bamonly_vh_clustering( bam_info** in_bams, exon_info** in_exons, parameters *params)
 {
 	int i, bam_index, chr_index, chr_index_bam, return_value, not_in_bam = 0, invdup_location, interdup_location;
 	int total_sv = 0, total_sv_lowqual = 0, divet_row_count;
@@ -682,7 +717,7 @@ void bamonly_vh_clustering( bam_info** in_bams, parameters *params)
 			init_rd_per_chr( in_bams[bam_index], params, chr_index);
 
 			/* Read bam file for this chromosome */
-			skip_chromosome = read_bam( in_bams[bam_index], params);
+			skip_chromosome = read_bam( in_bams[bam_index], in_exons, params);
 
 
 			if ( skip_chromosome)
@@ -912,7 +947,7 @@ void bamonly_vh_clustering( bam_info** in_bams, parameters *params)
 	print_sv_stats();
 }
 
-int bamonly_run( parameters *params, bam_info ** in_bams)
+int bamonly_run( parameters *params, bam_info ** in_bams, exon_info ** in_exons)
 {
 	int rd_del_filtered, bam_index;
 	int sv_total, i, len;
@@ -926,7 +961,7 @@ int bamonly_run( parameters *params, bam_info ** in_bams)
 			"(Mapping Quality Threshold: %d; RP Support Threshold: %d)\n\n"
 			, params->mq_threshold, params->rp_threshold);
 
-	bamonly_vh_clustering( in_bams, params);
+	bamonly_vh_clustering( in_bams, in_exons, params);
 
 	return RETURN_SUCCESS;
 }
