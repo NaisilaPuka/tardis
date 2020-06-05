@@ -323,14 +323,19 @@ void outputMEIClusters( parameters* params, char* chromosome_name)
 			F_count = 0;
 
 			/* If the MEI is in forward direction, MEIType2 is in Reverse */
-			if( ( MEIType % 2) == 0)
+			// if( ( MEIType % 2) == 0)
+			// {
+			// 	MEIType2 = MEIType + 1;
+			// 	orientMEI = MEIFORWARD;
+			// }
+			if((MEIType - 750993) < 0)
 			{
-				MEIType2 = MEIType + 1;
+				MEIType2 = MEIType + 750993;
 				orientMEI = MEIFORWARD;
 			}
 			else /* If the MEI is in reverse direction, MEIType2 is in Forward */
 			{
-				MEIType2 = MEIType - 1;
+				MEIType2 = MEIType - 750993;
 				orientMEI = MEIREVERSE;
 			}
 

@@ -50,7 +50,7 @@ void init_params( parameters** params)
 	( *params)->make_sonic = 0;
 	( *params)->load_sonic = 0;
 	( *params)->sonic_info = NULL;
-	( *params)->number_of_different_mei_types = 0;
+	( *params)->number_of_different_mei_types = 750993;
 	( *params)->quick = 1;
 	( *params)->ref_seq = NULL;
 	( *params)->hash_size = 0;

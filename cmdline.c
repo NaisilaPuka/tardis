@@ -332,7 +332,7 @@ int parse_command_line( int argc, char** argv, parameters* params)
 	params->output_hs = output_hs | ten_x;
 	params->make_sonic = make_sonic;
 	params->sensitive = sensitive;
-	params->number_of_different_mei_types = count_mei_columns( params->mei);
+	params->number_of_different_mei_types = 750993;
 	params->alt_mapping = alt_mapping;
 	params->no_interdup = no_interdup;
 	params->no_mei = no_mei;
