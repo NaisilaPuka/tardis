@@ -583,14 +583,10 @@ void discordant_mapping_MEI( library_properties *library, parameters* params,
 	newEl->pos = bam_align->pos_left;
 	newEl->qual = bam_align->qual;
 
-	if( ( bam_align->flag & BAM_FREVERSE) != 0) {
-		fprintf(stderr, "In discordant_mapping_MEI a new reverse\n");
+	if( ( bam_align->flag & BAM_FREVERSE) != 0)
 		newEl->orient = REVERSE;
-	}
-	else {
-		fprintf(stderr, "In discordant_mapping_MEI a new forward\n");
+	else
 		newEl->orient = FORWARD;
-	}
 
 	mei_cnt_bam++;
 	newEl->MEI_Type = MEI_Type;
@@ -1055,10 +1051,8 @@ void bamonly_vh_clustering( bam_info** in_bams, exon_info*** in_exons, parameter
 		// fflush( stderr);
 
 		/* Mei */
-		printf("11");
-		if( params->no_mei == 0)
-		{
-			fprintf( stderr, "\nPreparing MEI clusters");
+		
+			fprintf( stderr, "\nPreparing MEI clusterss");
 			initializeReadMapping_MEI( in_bams, params, chr_index);
 			fprintf( stderr, "..");
 			//fflush( stderr);
@@ -1068,8 +1062,6 @@ void bamonly_vh_clustering( bam_info** in_bams, exon_info*** in_exons, parameter
 			vh_finalizeReadMapping_Mei( params->this_sonic->chromosome_lengths[chr_index]);
 			fprintf( stderr, "..");
 			//fflush( stderr);
-		}
-		printf("12");
 
 		// /* NumT */
 		// if( ( strcmp( params->this_sonic->chromosome_names[chr_index], "MT") != 0)
@@ -1122,15 +1114,15 @@ void bamonly_vh_clustering( bam_info** in_bams, exon_info*** in_exons, parameter
 
 		fprintf( stderr, "\n");
 		findUniqueReads( in_bams, params, outputread);
-		printf("13");
+		
 
 		/* Free the mappings and libraries */
 		free_mappings( in_bams, params);
 		free_libraries();
-		printf("14");
+		
 		/* Apply Set-Cover */
 		vh_setcover( in_bams, params, fpVcf);
-		printf("15");
+		
 		total_sv += sv_count;
 		total_sv_lowqual += sv_lowqual_count;
 
