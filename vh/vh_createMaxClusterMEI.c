@@ -612,6 +612,7 @@ void outputMEIClusters( parameters* params, char* chromosome_name)
 
 void MEICluster_Region( parameters* params, int chr_index)
 {
+	fprintf(stderr, "\nHELLO FROM MEICluster_Region\n");
 	int leftBreakPoint;
 	int boolMEITypeNewAdded = 0; // 0 or 1 indicates an new insertion of one of the 6 different types of MEI
 	int boolMEITypeNewRemoved = 0; // 0 or 1 indicates a new deletion of one of the 6 different types of MEI
@@ -664,6 +665,7 @@ void vh_freeLinkedListMEI( mei_Reads * cur)
 
 void vh_finalizeReadMapping_Mei( int chroSize)
 {
+	fprintf(stderr, "\nHELLO FROM vh_finalizeReadMapping_Mei\n");
 	int i;
 	mei_Reads *ptr, *ptrNext;
 	for( i = 0; i < chroSize; i++)
