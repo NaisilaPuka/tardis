@@ -206,7 +206,7 @@ int main( int argc, char** argv)
 
 				fprintf( stderr, "All FASTQ files ready for remapping.\n");
 
-				 Remap with mrFAST 
+				/* Remap with mrFAST */
 				return_value = remap_mrfast( params, in_bams, cfg);
 				if( return_value != RETURN_SUCCESS)
 					return EXIT_EXTERNAL_PROG_ERROR;
