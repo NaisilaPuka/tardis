@@ -23,6 +23,15 @@ FILE *logFile = NULL;
 #define EXONS 750993
 #define TOKENS 11
 
+int compare(const void *s1, const void *s2)
+{
+  exon_info *e1 = *(exon_info **)s1;
+  exon_info *e2 = *(exon_info **)s2;
+
+  // printf("%d\n", e1->start - e2->start);
+  return e1->start - e2->start;
+}
+
 int main( int argc, char** argv)
 {
 	bam_info** in_bams;
@@ -179,6 +188,10 @@ int main( int argc, char** argv)
 		}
 		fclose(fp);
 	}
+	qsort(in_exons, EXONS, sizeof(exon_info *), compare);
+
+	for (int i = 0; i < EXONS; i++)
+		in_exons[i]->exon_code = i;
 	fprintf(stderr, "Loaded genes");
 
 	/* Passing the flags to VH */

@@ -36,7 +36,7 @@ long total_read_count = 0;
 
 char **allReadNameList;
 
-int is_retro_cnv(const char * chromosome_name, int start, int end, exon_info** in_exons) {
+int is_retro_cnv_deprecated(const char * chromosome_name, int start, int end, exon_info** in_exons) {
  	char str[3] = "chr";
 	for (int i = 0; i < EXONS; i++)
 	{
@@ -58,6 +58,85 @@ int is_retro_cnv(const char * chromosome_name, int start, int end, exon_info** i
 		free(chr);
 	}
 	return -1;
+}
+
+int this_interval_intersects(int pos_start, int pos_end, int start, int end){
+  /* all in */
+  if (pos_start >= start && pos_end < end)
+    return 1;
+
+  /* all cover */
+  else if (pos_start <= start && pos_end > end)
+    return 1;
+
+  /* left */
+  else if (pos_start <= start && pos_end >= start)
+    return 1;
+
+  /* right */
+  else if (pos_start <= end && pos_end > end)
+    return 1;
+
+  /* no hit.  */
+
+  return 0;
+}
+
+int is_retro_cnv(const char * chromosome_name, int pos_start, int pos_end, exon_info** in_exons){
+
+  int start;
+  int end;
+  int med;
+  int interval_count;
+
+  char str[3] = "chr";
+  int length = 3 + strlen(chromosome_name);
+  char * chr = malloc(length * sizeof(char));
+  for(int j = 0; j < 3; j++)
+	  chr[j] = str[j];
+  for(int j = 3; j < length; j++)
+	  chr[j] = chromosome_name[j - 3];
+  // printf("\n%s\n", chr);
+  
+  start = 0;
+  end = EXONS - 1;
+
+  med = (start + end) / 2;
+
+    
+  while (1){
+
+    if (start > end)
+      return -1;
+
+
+    if (strcmp(in_exons[med]->chr, chr) == 0 && this_interval_intersects(pos_start, pos_end, in_exons[med]->start, in_exons[med]->end))
+      return in_exons[med]->exon_code;
+
+    /* no hit. search is exhausted */
+    if (start == med || end == med){
+      if (strcmp(in_exons[start]->chr, chr) == 0 && this_interval_intersects(pos_start, pos_end, in_exons[start]->start, in_exons[start]->end))
+		return in_exons[start]->exon_code;
+      else if (strcmp(in_exons[end]->chr, chr) == 0 && this_interval_intersects(pos_start, pos_end, in_exons[end]->start, in_exons[end]->end))
+		return in_exons[end]->exon_code;      
+      return -1;
+    }
+
+    /* no hit, search left half */
+    else if (pos_start < in_exons[med]->start){
+      end = med;
+      med = (start + end) / 2;
+    }
+
+    /* no hit, search right half */
+    else {
+      start = med;
+      med = (start + end) / 2;      
+    }
+      
+  }
+
+  return -1;
 }
 
 void findUniqueReads( bam_info** in_bam, parameters *params, char *outputread)
