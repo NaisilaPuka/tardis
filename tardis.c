@@ -116,6 +116,7 @@ int main( int argc, char** argv)
 
 	/* Load genes */
 	/* For loading exons from refFlat.txt */
+	fprintf(stderr, "Loading genes ...");
 	filename = "refFlat.txt";
 	fp = fopen(filename, "r");
 	if (fp == NULL){
