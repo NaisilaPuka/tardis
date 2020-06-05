@@ -142,32 +142,32 @@ int main( int argc, char** argv)
 	   				
 					for(int j = 0; j < atoi(tokens[8]); j++)
 					{
-						in_exons[this_exon_code] = ( exon_info*) getMem( sizeof( exon_info));
+						// in_exons[this_exon_code] = ( exon_info*) getMem( sizeof( exon_info));
 
-						in_exons[this_exon_code]->gene_id = NULL;
-						set_str( &(in_exons[this_exon_code]->gene_id), tokens[0]);
+						// in_exons[this_exon_code]->gene_id = NULL;
+						// set_str( &(in_exons[this_exon_code]->gene_id), tokens[0]);
 
-						in_exons[this_exon_code]->transcript_id = NULL;
-						set_str( &(in_exons[this_exon_code]->transcript_id), tokens[1]);
+						// in_exons[this_exon_code]->transcript_id = NULL;
+						// set_str( &(in_exons[this_exon_code]->transcript_id), tokens[1]);
 
-						in_exons[this_exon_code]->chr = NULL;
-						set_str( &(in_exons[this_exon_code]->chr), tokens[2]);
+						// in_exons[this_exon_code]->chr = NULL;
+						// set_str( &(in_exons[this_exon_code]->chr), tokens[2]);
 						
-						in_exons[this_exon_code]->start = atoi(start);
+						// in_exons[this_exon_code]->start = atoi(start);
 						
-						in_exons[this_exon_code]->end = atoi(end);
+						// in_exons[this_exon_code]->end = atoi(end);
 						
-						in_exons[this_exon_code]->exon_code = this_exon_code;
+						// in_exons[this_exon_code]->exon_code = this_exon_code;
 						
-						if (strcmp(tokens[3], "+") == 0)
-							in_exons[this_exon_code]->strand = 0;
-						else
-							in_exons[this_exon_code]->strand = 1;
+						// if (strcmp(tokens[3], "+") == 0)
+						// 	in_exons[this_exon_code]->strand = 0;
+						// else
+						// 	in_exons[this_exon_code]->strand = 1;
 
-						if(j!= atoi(tokens[8])) {
-							start = strtok_r(NULL, ",", &saveptr1);
-							end = strtok_r(NULL, ",", &saveptr2);
-						}
+						// if(j!= atoi(tokens[8])) {
+						// 	start = strtok_r(NULL, ",", &saveptr1);
+						// 	end = strtok_r(NULL, ",", &saveptr2);
+						// }
 						this_exon_code++;
 						
 					}
