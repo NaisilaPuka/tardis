@@ -28,7 +28,7 @@ extern long alt_cnt_bam;
 
 #define bam1_cigar(b) ((uint32_t*)((b)->data + (b)->core.l_qname))
 
-int bamonly_run( parameters *params, bam_info ** in_bams, exon_info ** in_exons);
-int read_mapping( library_properties *library, exon_info** in_exons, parameters* params, bam1_t* bam_alignment, int32_t *bamToRefIndex, bam_alignment_region* bam_align);
+int bamonly_run( parameters *params, bam_info ** in_bams, exon_info *** in_exons);
+int read_mapping( library_properties *library, exon_info*** in_exons, parameters* params, bam1_t* bam_alignment, int32_t *bamToRefIndex, bam_alignment_region* bam_align);
 
 #endif /* BAMONLY_BO_BAMHANDLER_H_ */

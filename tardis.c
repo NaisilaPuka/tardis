@@ -22,6 +22,32 @@ FILE *logFile = NULL;
 #define MAXCHAR 10000
 #define EXONS 750993
 #define TOKENS 11
+#define CHR1 66348
+#define CHR2 54739
+#define CHR3 46233
+#define CHR4 26279
+#define CHR5 31829
+#define CHR6 34319
+#define CHR7 32873
+#define CHR8 30008
+#define CHR9 27685
+#define CHR10 33021
+#define CHR11 36311
+#define CHR12 37747
+#define CHR13 14013
+#define CHR14 20497
+#define CHR15 25045
+#define CHR16 26591
+#define CHR17 35271
+#define CHR18 11648
+#define CHR19 31536
+#define CHR20 16018
+#define CHR21 9026
+#define CHR22 14360
+#define CHRX 23334
+#define CHRY 4854
+#define CHRM 2
+#define CHROMS 26
 
 int compare(const void *s1, const void *s2)
 {
@@ -132,9 +158,48 @@ int main( int argc, char** argv)
 		fprintf(stderr, "Could not open file %s",filename);
 	}
 	else {
-		in_exons = ( exon_info**) getMem( (EXONS) * sizeof( exon_info*));
+		chrom_count = (int *) getMem( 26 * sizeof(int));
+		chrom_count[0] = 61406;
+		chrom_count[1] = CHR1;
+		chrom_count[2] = CHR2;
+		chrom_count[3] = CHR3;
+		chrom_count[4] = CHR4;
+		chrom_count[5] = CHR5;
+		chrom_count[6] = CHR6;
+		chrom_count[7] = CHR7;
+		chrom_count[8] = CHR8;
+		chrom_count[9] = CHR9;
+		chrom_count[10] = CHR10;
+		chrom_count[11] = CHR11;
+		chrom_count[12] = CHR12;
+		chrom_count[13] = CHR13;
+		chrom_count[14] = CHR14;
+		chrom_count[15] = CHR15;
+		chrom_count[16] = CHR16;
+		chrom_count[17] = CHR17;
+		chrom_count[18] = CHR18;
+		chrom_count[19] = CHR19;
+		chrom_count[20] = CHR20;
+		chrom_count[21] = CHR21;
+		chrom_count[22] = CHR22;
+		chrom_count[23] = CHRX;
+		chrom_count[24] = CHRY;
+		chrom_count[25] = CHRM;
+
+
+		// in_exons = ( exon_info**) getMem( (EXONS) * sizeof( exon_info*));
+		int * chrom_index = (int *) getMem( 26 * sizeof(int));
+		for (int l = 0; l < 26; l++)
+			chrom_index[l] = 0;
+
+		exon_info ***in_exons = ( exon_info***) getMem( (CHROMS) * sizeof( exon_info**));
+		for (int l = 0; l < CHROMS; l++) {
+			in_exons[l] = ( exon_info**) getMem( (chrom_count[l]) * sizeof( exon_info*));
+		}
+
 		tokens = (char **) getMem((TOKENS) * sizeof(char *));
 		this_exon_code = 0;
+
 		while (fgets(str, MAXCHAR, fp) != NULL) {
 			int k = 0;
 			char * token = strtok(str, "	");
@@ -151,34 +216,64 @@ int main( int argc, char** argv)
 	   				
 					for(int j = 0; j < atoi(tokens[8]); j++)
 					{
-						in_exons[this_exon_code] = ( exon_info*) getMem( sizeof( exon_info));
+						int index;
+					
+						if(strcmp(tokens[2] + 3, "X") == 0)
+							index = 23;
+						else if(strcmp(tokens[2] + 3, "Y") == 0)
+							index = 24;
+						else if(strcmp(tokens[2] + 3, "M") == 0)
+							index = 25;
+						else if(strlen(tokens[2]) < 6)
+							index = atoi(tokens[2] + 3);
+						else
+							index = 0;
 
-						in_exons[this_exon_code]->gene_id = NULL;
-						set_str( &(in_exons[this_exon_code]->gene_id), tokens[0]);
+						in_exons[index][chrom_index[index]] = ( exon_info*) getMem( sizeof( exon_info));
 
-						in_exons[this_exon_code]->transcript_id = NULL;
-						set_str( &(in_exons[this_exon_code]->transcript_id), tokens[1]);
+						in_exons[index][chrom_index[index]]->gene_id = NULL;
+						set_str( &(in_exons[index][chrom_index[index]]->gene_id), tokens[0]);
 
-						in_exons[this_exon_code]->chr = NULL;
-						set_str( &(in_exons[this_exon_code]->chr), tokens[2]);
+						in_exons[index][chrom_index[index]]->transcript_id = NULL;
+						set_str( &(in_exons[index][chrom_index[index]]->transcript_id), tokens[1]);
+
+						in_exons[index][chrom_index[index]]->chr = NULL;
+						set_str( &(in_exons[index][chrom_index[index]]->chr), tokens[2]);
 						
-						in_exons[this_exon_code]->start = atoi(start);
+						in_exons[index][chrom_index[index]]->start = atoi(start);
 						
-						in_exons[this_exon_code]->end = atoi(end);
+						in_exons[index][chrom_index[index]]->end = atoi(end);
 						
-						in_exons[this_exon_code]->exon_code = this_exon_code;
+						in_exons[index][chrom_index[index]]->exon_code = this_exon_code;
 						
 						if (strcmp(tokens[3], "+") == 0)
-							in_exons[this_exon_code]->strand = 0;
+							in_exons[index][chrom_index[index]]->strand = 0;
 						else
-							in_exons[this_exon_code]->strand = 1;
+							in_exons[index][chrom_index[index]]->strand = 1;
+
+						char exon_index[5];
+						sprintf(exon_index, "%d", j);
+
+						char * str3 = (char *) malloc(4 + strlen(tokens[0]) + strlen(tokens[1]) + strlen(exon_index) + strlen(tokens[2]));
+						strcpy(str3, tokens[0]);
+						strcat(str3, "_");
+						strcat(str3, tokens[1]);
+						strcat(str3, "_");
+						strcat(str3, exon_index);
+						strcat(str3, "_");
+						strcat(str3, tokens[2]);
+
+						in_exons[index][chrom_index[index]]->exon_id = NULL;
+						set_str( &(in_exons[index][chrom_index[index]]->exon_id), str3);
+
+						free(str3);
 
 						if(j!= atoi(tokens[8])) {
 							start = strtok_r(NULL, ",", &saveptr1);
 							end = strtok_r(NULL, ",", &saveptr2);
 						}
 						this_exon_code++;
-						
+						chrom_index[index] = chrom_index[index] + 1;
 					}
 					break;
 				}
@@ -188,10 +283,13 @@ int main( int argc, char** argv)
 		}
 		fclose(fp);
 	}
-	qsort(in_exons, EXONS, sizeof(exon_info *), compare);
+	//qsort(in_exons, EXONS, sizeof(exon_info *), compare);
+	for (int l = 1; l < CHROMS; l++) {
+		qsort(in_exons[l], chrom_count[l], sizeof(exon_info *), compare);
+	}
 
-	for (int i = 0; i < EXONS; i++)
-		in_exons[i]->exon_code = i;
+	// for (int i = 0; i < EXONS; i++)
+	// 	in_exons[i]->exon_code = i;
 	fprintf(stderr, "Loaded genes");
 
 	/* Passing the flags to VH */

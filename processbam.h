@@ -44,6 +44,7 @@ typedef struct _exon_info
 	char * gene_id;
 	char * transcript_id;
 	char * chr;
+	char * exon_id;
 	int start;
 	int end;
   	int strand; /*0 forward, 1 reverse*/

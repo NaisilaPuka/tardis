@@ -19,6 +19,32 @@
 #include "mappings.h"
 
 #define EXONS 750993
+#define CHR1 66348
+#define CHR2 54739
+#define CHR3 46233
+#define CHR4 26279
+#define CHR5 31829
+#define CHR6 34319
+#define CHR7 32873
+#define CHR8 30008
+#define CHR9 27685
+#define CHR10 33021
+#define CHR11 36311
+#define CHR12 37747
+#define CHR13 14013
+#define CHR14 20497
+#define CHR15 25045
+#define CHR16 26591
+#define CHR17 35271
+#define CHR18 11648
+#define CHR19 31536
+#define CHR20 16018
+#define CHR21 9026
+#define CHR22 14360
+#define CHRX 23334
+#define CHRY 4854
+#define CHRM 2
+#define CHROMS 26
 
 long del_cnt_bam = 0;
 long ins_cnt_bam = 0;
@@ -35,6 +61,7 @@ long total_read_count = 0;
 
 
 char **allReadNameList;
+int * chrom_count;
 
 int is_retro_cnv_deprecated(const char * chromosome_name, int start, int end, exon_info** in_exons) {
  	char str[3] = "chr";
@@ -82,7 +109,7 @@ int this_interval_intersects(int pos_start, int pos_end, int start, int end){
   return 0;
 }
 
-int is_retro_cnv(const char * chromosome_name, int pos_start, int pos_end, exon_info** in_exons){
+int is_retro_cnv_deprecated2(const char * chromosome_name, int pos_start, int pos_end, exon_info** in_exons){
 
   int start;
   int end;
@@ -108,7 +135,6 @@ int is_retro_cnv(const char * chromosome_name, int pos_start, int pos_end, exon_
 
     if (start > end)
       return -1;
-
 
     if (strcmp(in_exons[med]->chr, chr) == 0 && this_interval_intersects(pos_start, pos_end, in_exons[med]->start, in_exons[med]->end))
       return in_exons[med]->exon_code;
@@ -137,6 +163,118 @@ int is_retro_cnv(const char * chromosome_name, int pos_start, int pos_end, exon_
   }
 
   return -1;
+}
+
+exon_info * is_retro_cnv(const char * chromosome_name, int pos_start, int pos_end, exon_info*** in_exons){
+
+	exon_info * potential_retro_cnv = NULL;
+	int index = -1;
+	if(strcmp(chromosome_name, "X") == 0)
+		index = 23;
+	else if(strcmp(chromosome_name, "Y") == 0)
+		index = 24;
+	else if(strcmp(chromosome_name, "MT") == 0)
+		index = 25;
+	else if((strlen(chromosome_name) < 3))
+		index = atoi(chromosome_name);
+
+	if(index == -1)
+		return potential_retro_cnv;
+	int start;
+	int end;
+	int med;
+	int interval_count;
+
+	// char str[3] = "chr";
+	// int length = 3 + strlen(chromosome_name);
+	// char * chr = malloc(length * sizeof(char));
+	// for(int j = 0; j < 3; j++)
+	// 	chr[j] = str[j];
+	// for(int j = 3; j < length; j++)
+	// 	chr[j] = chromosome_name[j - 3];
+  // printf("\n%s\n", chr);
+
+	start = 0;
+	end = chrom_count[index] - 1;
+
+	med = (start + end) / 2;
+
+
+	while (1){
+
+		if (start > end)
+			return potential_retro_cnv;
+
+
+		if (this_interval_intersects(pos_start, pos_end, in_exons[index][med]->start, in_exons[index][med]->end)) {
+			potential_retro_cnv = ( exon_info*) getMem( sizeof( exon_info));
+			potential_retro_cnv->gene_id = NULL;
+			set_str( &(potential_retro_cnv->gene_id), in_exons[index][med]->gene_id);
+			potential_retro_cnv->transcript_id = NULL;
+			set_str( &(potential_retro_cnv->transcript_id), in_exons[index][med]->transcript_id);
+			potential_retro_cnv->chr = NULL;
+			set_str( &(potential_retro_cnv->chr), in_exons[index][med]->chr);
+			potential_retro_cnv->start = in_exons[index][med]->start;
+			potential_retro_cnv->end = in_exons[index][med]->end;
+			potential_retro_cnv->exon_code = in_exons[index][med]->exon_code;	
+			potential_retro_cnv->strand = in_exons[index][med]->strand;
+			potential_retro_cnv->exon_id = NULL;
+			set_str( &(potential_retro_cnv->exon_id), in_exons[index][med]->exon_id);
+			return potential_retro_cnv;
+		}
+
+    /* no hit. search is exhausted */
+		if (start == med || end == med){
+			if (this_interval_intersects(pos_start, pos_end, in_exons[index][start]->start, in_exons[index][start]->end)) {
+				potential_retro_cnv = ( exon_info*) getMem( sizeof( exon_info));
+				potential_retro_cnv->gene_id = NULL;
+				set_str( &(potential_retro_cnv->gene_id), in_exons[index][start]->gene_id);
+				potential_retro_cnv->transcript_id = NULL;
+				set_str( &(potential_retro_cnv->transcript_id), in_exons[index][start]->transcript_id);
+				potential_retro_cnv->chr = NULL;
+				set_str( &(potential_retro_cnv->chr), in_exons[index][start]->chr);
+				potential_retro_cnv->start = in_exons[index][start]->start;
+				potential_retro_cnv->end = in_exons[index][start]->end;
+				potential_retro_cnv->exon_code = in_exons[index][start]->exon_code;	
+				potential_retro_cnv->strand = in_exons[index][start]->strand;
+				potential_retro_cnv->exon_id = NULL;
+				set_str( &(potential_retro_cnv->exon_id), in_exons[index][start]->exon_id);
+				return potential_retro_cnv;
+			}
+			else if (this_interval_intersects(pos_start, pos_end, in_exons[index][end]->start, in_exons[index][end]->end)) {
+				potential_retro_cnv = ( exon_info*) getMem( sizeof( exon_info));
+				potential_retro_cnv->gene_id = NULL;
+				set_str( &(potential_retro_cnv->gene_id), in_exons[index][end]->gene_id);
+				potential_retro_cnv->transcript_id = NULL;
+				set_str( &(potential_retro_cnv->transcript_id), in_exons[index][end]->transcript_id);
+				potential_retro_cnv->chr = NULL;
+				set_str( &(potential_retro_cnv->chr), in_exons[index][end]->chr);
+				potential_retro_cnv->start = in_exons[index][end]->start;
+				potential_retro_cnv->end = in_exons[index][end]->end;
+				potential_retro_cnv->exon_code = in_exons[index][end]->exon_code;	
+				potential_retro_cnv->strand = in_exons[index][end]->strand;
+				potential_retro_cnv->exon_id = NULL;
+				set_str( &(potential_retro_cnv->exon_id), in_exons[index][end]->exon_id);
+				return potential_retro_cnv;
+			}
+			return potential_retro_cnv;
+		}
+
+    /* no hit, search left half */
+		else if (pos_start < in_exons[index][med]->start){
+			end = med;
+			med = (start + end) / 2;
+		}
+
+    /* no hit, search right half */
+		else {
+			start = med;
+			med = (start + end) / 2;      
+		}
+
+	}
+
+	return potential_retro_cnv;
 }
 
 void findUniqueReads( bam_info** in_bam, parameters *params, char *outputread)
@@ -533,13 +671,14 @@ int find_numt_bam( bam_alignment_region* bam_align, char *chromosome_name_left, 
 }
 
 
-int find_mei_bam( parameters *params, exon_info** in_exons, char *chromosome_name, char** mei_subclass, char** mei_class, int start, int end, int flag)
+int find_mei_bam( parameters *params, exon_info*** in_exons, char *chromosome_name, char** mei_subclass, char** mei_class, int start, int end, int flag)
 {
 	int ind, len;
 	int return_type = NOTMEI;
 
 	sonic_repeat *repeat_item;
-	int exon;
+	//int exon;
+	exon_info * exon;
 
 	/* Check if the right end is inside the annotated transposon */
 	fprintf( stderr, "\n Checking chromosome %s with start %d and end %d and length %d", chromosome_name, start, end, end - start);
@@ -549,7 +688,7 @@ int find_mei_bam( parameters *params, exon_info** in_exons, char *chromosome_nam
 	// 	fprintf( stderr, "\n NOTMEI\n");
 	// 	return NOTMEI;
 	// }
-	if( exon == -1) {
+	if( exon == NULL) {
 		fprintf( stderr, "\n NOTMEI\n");
 		return NOTMEI;
 	}
@@ -561,11 +700,11 @@ int find_mei_bam( parameters *params, exon_info** in_exons, char *chromosome_nam
 
 	(*mei_subclass) = NULL;
 	//set_str( mei_subclass, repeat_item->repeat_type);
-	set_str( mei_subclass, in_exons[exon]->transcript_id);
+	set_str( mei_subclass, exon->exon_id);
 
 	(*mei_class) = NULL;
 	//set_str( mei_class, repeat_item->repeat_class);
-	set_str( mei_class, in_exons[exon]->gene_id);
+	set_str( mei_class, exon->exon_id);
 
 	/* NOTE: SONIC keeps repeat_class as SINE/Alu, LINE/L1, etc. */
 	// if( ( ( flag & BAM_FMREVERSE) == 0 && repeat_item->strand == SONIC_STRAND_REV)
@@ -573,15 +712,15 @@ int find_mei_bam( parameters *params, exon_info** in_exons, char *chromosome_nam
 		//return_type = repeat_item->mei_code * 2;
 	if( ( ( flag & BAM_FMREVERSE) == 0 && in_exons[exon]->strand == SONIC_STRAND_REV)
 			|| ( ( flag & BAM_FMREVERSE) != 0 && in_exons[exon]->strand == SONIC_STRAND_FWD))
-		return_type = in_exons[exon]->exon_code;
+		return_type = exon->exon_code;
 	else
 		//return_type = (repeat_item->mei_code * 2) + 1;
-		return_type = in_exons[exon]->exon_code + EXONS;
+		return_type = exon->exon_code + EXONS;
 	fprintf( stderr, "exon_type: %d\n", return_type);
 	return return_type;
 }
 
-int read_mapping( library_properties *library, exon_info** in_exons, parameters* params, bam1_t* bam_alignment, int32_t *bamToRefIndex, bam_alignment_region* bam_align)
+int read_mapping( library_properties *library, exon_info*** in_exons, parameters* params, bam1_t* bam_alignment, int32_t *bamToRefIndex, bam_alignment_region* bam_align)
 {
 	int svType, meiType = NOTMEI, numtType = NOTNUMT, left_end_id, right_end_id, i, insLen;
 	char* mei_subclass, *mei_class;
@@ -1029,7 +1168,7 @@ void bamonly_vh_clustering( bam_info** in_bams, exon_info** in_exons, parameters
 	print_sv_stats();
 }
 
-int bamonly_run( parameters *params, bam_info ** in_bams, exon_info ** in_exons)
+int bamonly_run( parameters *params, bam_info ** in_bams, exon_info *** in_exons)
 {
 	int rd_del_filtered, bam_index;
 	int sv_total, i, len;
@@ -1042,6 +1181,34 @@ int bamonly_run( parameters *params, bam_info ** in_bams, exon_info ** in_exons)
 	fprintf( logFile,"\n--> Processing BAM file for read pair and read depth filtering\n"
 			"(Mapping Quality Threshold: %d; RP Support Threshold: %d)\n\n"
 			, params->mq_threshold, params->rp_threshold);
+
+	chrom_count = (int *) getMem( 26 * sizeof(int));
+	chrom_count[0] = 61406;
+	chrom_count[1] = CHR1;
+	chrom_count[2] = CHR2;
+	chrom_count[3] = CHR3;
+	chrom_count[4] = CHR4;
+	chrom_count[5] = CHR5;
+	chrom_count[6] = CHR6;
+	chrom_count[7] = CHR7;
+	chrom_count[8] = CHR8;
+	chrom_count[9] = CHR9;
+	chrom_count[10] = CHR10;
+	chrom_count[11] = CHR11;
+	chrom_count[12] = CHR12;
+	chrom_count[13] = CHR13;
+	chrom_count[14] = CHR14;
+	chrom_count[15] = CHR15;
+	chrom_count[16] = CHR16;
+	chrom_count[17] = CHR17;
+	chrom_count[18] = CHR18;
+	chrom_count[19] = CHR19;
+	chrom_count[20] = CHR20;
+	chrom_count[21] = CHR21;
+	chrom_count[22] = CHR22;
+	chrom_count[23] = CHRX;
+	chrom_count[24] = CHRY;
+	chrom_count[25] = CHRM;
 
 	bamonly_vh_clustering( in_bams, in_exons, params);
 
