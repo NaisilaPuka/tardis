@@ -9,6 +9,7 @@
 #define VH_VH_CREATEMAXCLUSTERMEI_H_
 
 #include "../processbam.h"
+#include "../processfq.h"
 
 #define lenSplitReadBrakWindow 20
 #define MEILEFTPAIR 'X'
