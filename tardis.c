@@ -119,7 +119,7 @@ int main( int argc, char** argv)
 	filename = "refFlat.txt";
 	fp = fopen(filename, "r");
 	if (fp == NULL){
-		fprintf("Could not open file %s",filename);
+		fprintf(stderr, "Could not open file %s",filename);
 	}
 	else {
 		in_exons = ( exon_info**) getMem( (EXONS) * sizeof( exon_info*));
@@ -177,7 +177,7 @@ int main( int argc, char** argv)
 		}
 		fclose(fp);
 	}
-	fprintf("Loaded genes");
+	fprintf(stderr, "Loaded genes");
 
 	/* Passing the flags to VH */
 	ten_x_flag = params->ten_x;
