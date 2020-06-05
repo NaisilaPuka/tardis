@@ -140,7 +140,7 @@ int main( int argc, char** argv)
 					//start = strtok_r(tokens[9], ",", &saveptr1);
 					//end = strtok_r(tokens[10], ",", &saveptr2);
 	   				
-					for(int j = 0; j < atoi(tokens[8]); j++)
+					for(int j = 0; j < 3/*atoi(tokens[8])*/; j++)
 					{
 						// in_exons[this_exon_code] = ( exon_info*) getMem( sizeof( exon_info));
 
