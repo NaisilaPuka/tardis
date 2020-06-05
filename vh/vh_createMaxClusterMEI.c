@@ -745,8 +745,9 @@ int mei_regions( parameters *params, char* chromosome_name)
 }
 
 
-void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_index)
+int initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_index)
 {
+	int a;
 	fprintf(stderr, "pASSED THIS -1\n");
 	int i, mei_count;
 
@@ -765,11 +766,13 @@ void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_
 	H_S = vh_newHeapMEI(MAX_CLUSTER_SIZE);
 
 	if( running_mode == QUICK) {
+		a = 0;
 		fprintf(stderr, "HERE IN QUICK MODE\n");
 		mei_count = addToGenomeIndex_MEI( in_bams, params, params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
 	}
 	else
 	{
+		a = -1;
 		fprintf(stderr, "HERE IN SENSITIVE MODE\n");
 		/* find the MEI sites */
 		mei_count = mei_regions( params, params->this_sonic->chromosome_names[chr_index]);
@@ -777,4 +780,5 @@ void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_
 		mei_count = addToGenomeIndex_MEI_sensitive( params, params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
 		fprintf(logFile,"%d MEI in clusters\n", mei_count);
 	}
+	return a;
 }

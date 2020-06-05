@@ -1053,7 +1053,11 @@ void bamonly_vh_clustering( bam_info** in_bams, exon_info*** in_exons, parameter
 		/* Mei */
 		
 			fprintf( stderr, "\nPreparing MEI clusterss");
-			initializeReadMapping_MEI( in_bams, params, chr_index);
+			int a = initializeReadMapping_MEI( in_bams, params, chr_index);
+			if(a == 0)
+				fprintf( stderr, "\nHELLO QUICK\n");
+			else
+				fprintf( stderr, "\nHELLO SENSITIVE\n");
 			fprintf( stderr, "..");
 			//fflush( stderr);
 			MEICluster_Region( params, chr_index);
