@@ -798,7 +798,7 @@ int read_mapping( library_properties *library, exon_info*** in_exons, parameters
 	return -1;
 }
 
-int read_bam( bam_info* in_bam, exon_info** in_exons, parameters* params)
+int read_bam( bam_info* in_bam, exon_info*** in_exons, parameters* params)
 {
 	/* Variables */
 	int i, chr_index_bam, return_type, ed, len, lib_index;

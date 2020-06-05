@@ -421,7 +421,7 @@ void find_alt_mappings( bam_info* in_bam, parameters* params, int lib_index, bam
 	}
 }
 
-int primary_mapping( bam_info* in_bam, exon_info** in_exons, parameters* params, int lib_index, bam1_t* bam_alignment, int32_t *bamToRefIndex)
+int primary_mapping( bam_info* in_bam, exon_info*** in_exons, parameters* params, int lib_index, bam1_t* bam_alignment, int32_t *bamToRefIndex)
 {
 	uint8_t *tmp;
 	int return_type;
