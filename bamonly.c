@@ -1056,7 +1056,7 @@ void bamonly_vh_clustering( bam_info** in_bams, exon_info*** in_exons, parameter
 			int a = initializeReadMapping_MEI( in_bams, params, chr_index);
 			if(a == 0)
 				fprintf( stderr, "\nHELLO QUICK\n");
-			else
+			else if (a == -1)
 				fprintf( stderr, "\nHELLO SENSITIVE\n");
 			fprintf( stderr, "..");
 			//fflush( stderr);
