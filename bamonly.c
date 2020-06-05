@@ -41,8 +41,8 @@
 #define CHR20 16018
 #define CHR21 9026
 #define CHR22 14360
-#define CHRX 23334
-#define CHRY 4854
+#define CHROX 23334
+#define CHROY 4854
 #define CHRM 2
 #define CHROMS 26
 
@@ -710,8 +710,8 @@ int find_mei_bam( parameters *params, exon_info*** in_exons, char *chromosome_na
 	// if( ( ( flag & BAM_FMREVERSE) == 0 && repeat_item->strand == SONIC_STRAND_REV)
 	// 		|| ( ( flag & BAM_FMREVERSE) != 0 && repeat_item->strand == SONIC_STRAND_FWD))
 		//return_type = repeat_item->mei_code * 2;
-	if( ( ( flag & BAM_FMREVERSE) == 0 && in_exons[exon]->strand == SONIC_STRAND_REV)
-			|| ( ( flag & BAM_FMREVERSE) != 0 && in_exons[exon]->strand == SONIC_STRAND_FWD))
+	if( ( ( flag & BAM_FMREVERSE) == 0 && exon->strand == SONIC_STRAND_REV)
+			|| ( ( flag & BAM_FMREVERSE) != 0 && exon->strand == SONIC_STRAND_FWD))
 		return_type = exon->exon_code;
 	else
 		//return_type = (repeat_item->mei_code * 2) + 1;
@@ -861,7 +861,7 @@ int read_bam( bam_info* in_bam, exon_info** in_exons, parameters* params)
 }
 
 
-void bamonly_vh_clustering( bam_info** in_bams, exon_info** in_exons, parameters *params)
+void bamonly_vh_clustering( bam_info** in_bams, exon_info*** in_exons, parameters *params)
 {
 	int i, bam_index, chr_index, chr_index_bam, return_value, not_in_bam = 0, invdup_location, interdup_location;
 	int total_sv = 0, total_sv_lowqual = 0, divet_row_count;
@@ -1206,8 +1206,8 @@ int bamonly_run( parameters *params, bam_info ** in_bams, exon_info *** in_exons
 	chrom_count[20] = CHR20;
 	chrom_count[21] = CHR21;
 	chrom_count[22] = CHR22;
-	chrom_count[23] = CHRX;
-	chrom_count[24] = CHRY;
+	chrom_count[23] = CHROX;
+	chrom_count[24] = CHROY;
 	chrom_count[25] = CHRM;
 
 	bamonly_vh_clustering( in_bams, in_exons, params);
