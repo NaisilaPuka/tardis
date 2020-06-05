@@ -18,6 +18,7 @@
 #include "free.h"
 
 FILE *logFile = NULL;
+int * chrom_count;
 
 #define MAXCHAR 10000
 #define EXONS 750993
@@ -77,7 +78,7 @@ int main( int argc, char** argv)
 	char* filename;
 	char * start;
 	char * end;
-	exon_info **in_exons;
+	exon_info ***in_exons;
 	char ** tokens;
 	int this_exon_code;
 	/**/
@@ -192,7 +193,7 @@ int main( int argc, char** argv)
 		for (int l = 0; l < 26; l++)
 			chrom_index[l] = 0;
 
-		exon_info ***in_exons = ( exon_info***) getMem( (CHROMS) * sizeof( exon_info**));
+		in_exons = ( exon_info***) getMem( (CHROMS) * sizeof( exon_info**));
 		for (int l = 0; l < CHROMS; l++) {
 			in_exons[l] = ( exon_info**) getMem( (chrom_count[l]) * sizeof( exon_info*));
 		}
