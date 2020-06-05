@@ -132,15 +132,15 @@ int main( int argc, char** argv)
 
 	   		// loop through the string to extract all other tokens
 			while( token != NULL ) {
-				tokens[i] = NULL;
-				set_str( &(tokens[i]), token);
+				tokens[k] = NULL;
+				set_str( &(tokens[k]), token);
 
 				if(k==10) {
 
-					//start = strtok_r(tokens[9], ",", &saveptr1);
-					//end = strtok_r(tokens[10], ",", &saveptr2);
+					start = strtok_r(tokens[9], ",", &saveptr1);
+					end = strtok_r(tokens[10], ",", &saveptr2);
 	   				
-					for(int j = 0; j < 3/*atoi(tokens[8])*/; j++)
+					for(int j = 0; j < atoi(tokens[8]); j++)
 					{
 						// in_exons[this_exon_code] = ( exon_info*) getMem( sizeof( exon_info));
 
