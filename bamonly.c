@@ -1058,6 +1058,7 @@ void bamonly_vh_clustering( bam_info** in_bams, exon_info*** in_exons, parameter
 				fprintf( stderr, "\nHELLO QUICK\n");
 			else if (a == -1)
 				fprintf( stderr, "\nHELLO SENSITIVE\n");
+			fprintf( stderr, "\na is %d\n", a);
 			fprintf( stderr, "..");
 			//fflush( stderr);
 			MEICluster_Region( params, chr_index);
