@@ -45,8 +45,8 @@ int * chrom_count;
 #define CHR20 16018
 #define CHR21 9026
 #define CHR22 14360
-#define CHRX 23334
-#define CHRY 4854
+#define CHROX 23334
+#define CHROY 4854
 #define CHRM 2
 #define CHROMS 26
 
@@ -183,8 +183,8 @@ int main( int argc, char** argv)
 		chrom_count[20] = CHR20;
 		chrom_count[21] = CHR21;
 		chrom_count[22] = CHR22;
-		chrom_count[23] = CHRX;
-		chrom_count[24] = CHRY;
+		chrom_count[23] = CHROX;
+		chrom_count[24] = CHROY;
 		chrom_count[25] = CHRM;
 
 
