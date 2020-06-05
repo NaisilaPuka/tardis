@@ -754,6 +754,7 @@ void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_
 	if( mReads == NULL)
 		vh_logWarning ("Memory Problem in vh_createMaxClusterMEI");
 
+	fprintf(stderr, "pASSED THIS 1\n");
 	for( i = 0; i < params->this_sonic->chromosome_lengths[chr_index]; i++)
 		mReads[i] = NULL;
 
@@ -767,6 +768,7 @@ void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_
 	}
 	else
 	{
+		fprintf(stderr, "HERE IN SENSITIVE MODE\n");
 		/* find the MEI sites */
 		mei_count = mei_regions( params, params->this_sonic->chromosome_names[chr_index]);
 		fprintf(logFile,"MEI regions count= %d\t", mei_count);
