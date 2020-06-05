@@ -22,8 +22,10 @@ int addToGenomeIndex_MEI (bam_info** in_bams, parameters *params, char *chromoso
 	sonic_repeat *mei;
 	int libId = 0;
 
+	fprintf(stderr, "ENTER HERE in outside loops\n");
 	for( numSample = 0; numSample < params->num_bams; numSample++)
 	{
+		fprintf(stderr, "ENTER HERE in outer outer loop\n");
 		for( count = 0; count < in_bams[numSample]->num_libraries; count++)
 		{
 			discordantReadPtr = in_bams[numSample]->libraries[count]->listMEI_Mapping;
@@ -759,8 +761,10 @@ void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_
 	H_R = vh_newHeapMEI(MAX_CLUSTER_SIZE);
 	H_S = vh_newHeapMEI(MAX_CLUSTER_SIZE);
 
-	if( running_mode == QUICK)
+	if( running_mode == QUICK) {
+		fprintf(stderr, "HERE IN QUICK MODE\n");
 		mei_count = addToGenomeIndex_MEI( in_bams, params, params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
+	}
 	else
 	{
 		/* find the MEI sites */
