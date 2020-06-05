@@ -34,6 +34,7 @@ int addToGenomeIndex_MEI (bam_info** in_bams, parameters *params, char *chromoso
 				if( is_satellite == 0 && strcmp( discordantReadPtr->chromosome_name, chromosome_name) == 0
 						&& ( discordantReadPtr->pos > 0) && ( discordantReadPtr->pos_End < chroSize))
 				{
+					fprintf(stderr, "ENTER HERE\n");
 					if( discordantReadPtr->MEI_Type > -1)
 					{
 						tmpMEI_Reads = (mei_Reads*) getMem( sizeof( mei_Reads));
