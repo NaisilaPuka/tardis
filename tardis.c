@@ -137,8 +137,8 @@ int main( int argc, char** argv)
 
 				if(k==10) {
 
-					start = strtok_r(tokens[9], ",", &saveptr1);
-					end = strtok_r(tokens[10], ",", &saveptr2);
+					//start = strtok_r(tokens[9], ",", &saveptr1);
+					//end = strtok_r(tokens[10], ",", &saveptr2);
 	   				
 					for(int j = 0; j < atoi(tokens[8]); j++)
 					{
