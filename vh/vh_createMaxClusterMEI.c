@@ -751,6 +751,7 @@ void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_
 
 	mReads = (mei_Reads **) getMem( params->this_sonic->chromosome_lengths[chr_index] * sizeof( mei_Reads *));
 
+	fprintf(stderr, "pASSED THIS 0\n");
 	if( mReads == NULL)
 		vh_logWarning ("Memory Problem in vh_createMaxClusterMEI");
 

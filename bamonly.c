@@ -963,18 +963,18 @@ void bamonly_vh_clustering( bam_info** in_bams, exon_info*** in_exons, parameter
 
 			//fprintf( stderr, "%d altLeftPrimRight, %d primRightAltLeft, %d altLeftAltRight, %d primLeftAltRight\n", altLeftPrimRight, primRightAltLeft, altLeftAltRight, primLeftAltRight);
 
-			if( !params->no_soft_clip)
-			{
-				/* Count the number of softclip reads which are clustering for each read */
-				fprintf( stderr, "\nReading reference genome");
-				readReferenceSeq( params, chr_index);
+			// if( !params->no_soft_clip)
+			// {
+			// 	/* Count the number of softclip reads which are clustering for each read */
+			// 	fprintf( stderr, "\nReading reference genome");
+			// 	readReferenceSeq( params, chr_index);
 
-				fprintf( stderr, "\nRunning split read mapping..");
-				countNumSoftClipInCluster( params, in_bams[bam_index], chr_index);
-				fprintf( stderr, "..");
-				mapSoftClipToRef( in_bams[bam_index], params, chr_index);
-				fprintf( stderr, "..");
-			}
+			// 	fprintf( stderr, "\nRunning split read mapping..");
+			// 	countNumSoftClipInCluster( params, in_bams[bam_index], chr_index);
+			// 	fprintf( stderr, "..");
+			// 	mapSoftClipToRef( in_bams[bam_index], params, chr_index);
+			// 	fprintf( stderr, "..");
+			// }
 
 			/* Mean value (mu) calculation */
 			calc_mean_per_chr( params, in_bams[bam_index], chr_index);
