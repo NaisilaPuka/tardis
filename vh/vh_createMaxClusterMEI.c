@@ -28,8 +28,16 @@ int addToGenomeIndex_MEI (bam_info** in_bams, parameters *params, char *chromoso
 		{
 			discordantReadPtr = in_bams[numSample]->libraries[count]->listMEI_Mapping;
 			softClipPtr = in_bams[numSample]->libraries[count]->listSoftClip;
+			fprintf(stderr, "ENTER HERE in outer loop\n");
 			while( discordantReadPtr != NULL)
 			{
+				fprintf(stderr, "ENTER HERE in inner loop\n");
+				if(strcmp( discordantReadPtr->chromosome_name, chromosome_name) == 0)
+					fprintf(stderr, "Chromosome names are same here\n");
+				if(( discordantReadPtr->pos > 0))
+					fprintf(stderr, "discordantReadPtr->pos > 0 here\n");
+				if(discordantReadPtr->pos_End < chroSize)
+					fprintf(stderr, "discordantReadPtr->pos_End < chroSize here\n");
 				//is_satellite = sonic_is_satellite (params->this_sonic, discordantReadPtr->chromosome_name, discordantReadPtr->pos, discordantReadPtr->pos_End);
 				is_satellite = 0;
 				if( is_satellite == 0 && strcmp( discordantReadPtr->chromosome_name, chromosome_name) == 0
