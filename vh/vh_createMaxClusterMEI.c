@@ -342,12 +342,14 @@ void outputMEIClusters( parameters* params, char* chromosome_name)
 			/* Count the number of MEIs in H_F that matches the MEIType */
 			for( count = 0; count < H_F->heapSize; count++)
 			{
+				fprintf( stderr, "\nH_F->heapArray[count].mei_ReadsPtr->MEI_Type: %d\n", H_F->heapArray[count].mei_ReadsPtr->MEI_Type);
 				if( H_F->heapArray[count].mei_ReadsPtr->MEI_Type == MEIType)
 					F_count++;
 			}
 			/* Count the number of MEIs in H_R that matches the MEIType2 */
 			for( count = 0; count < H_R->heapSize; count++)
 			{
+				fprintf( stderr, "\nH_R->heapArray[count].mei_ReadsPtr->MEI_Type: %d\n", H_R->heapArray[count].mei_ReadsPtr->MEI_Type);
 				if( H_R->heapArray[count].mei_ReadsPtr->MEI_Type == MEIType2)
 					R_count++;
 			}
