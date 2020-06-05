@@ -119,21 +119,21 @@ int main( int argc, char** argv)
 	filename = "refFlat.txt";
 	fp = fopen(filename, "r");
 	if (fp == NULL){
-		printf("Could not open file %s",filename);
+		fprintf("Could not open file %s",filename);
 	}
 	else {
 		in_exons = ( exon_info**) getMem( (EXONS) * sizeof( exon_info*));
-		tokens = (char **) malloc((TOKENS) * sizeof(char *));
+		tokens = (char **) getMem((TOKENS) * sizeof(char *));
 		this_exon_code = 0;
 		while (fgets(str, MAXCHAR, fp) != NULL) {
-			int i = 0;
+			int k = 0;
 			char * token = strtok(str, "	");
 
 	   		// loop through the string to extract all other tokens
 			while( token != NULL ) {
 				set_str( &(tokens[i]), token);
 
-				if(i==10) {
+				if(k==10) {
 
 					start = strtok_r(tokens[9], ",", &saveptr1);
 					end = strtok_r(tokens[10], ",", &saveptr2);
@@ -171,12 +171,13 @@ int main( int argc, char** argv)
 					}
 					break;
 				}
-				i++;
+				k++;
 				token = strtok(NULL, "	");
 			}
 		}
 		fclose(fp);
 	}
+	fprintf("Loaded genes");
 
 	/* Passing the flags to VH */
 	ten_x_flag = params->ten_x;
