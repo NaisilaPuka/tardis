@@ -583,10 +583,14 @@ void discordant_mapping_MEI( library_properties *library, parameters* params,
 	newEl->pos = bam_align->pos_left;
 	newEl->qual = bam_align->qual;
 
-	if( ( bam_align->flag & BAM_FREVERSE) != 0)
+	if( ( bam_align->flag & BAM_FREVERSE) != 0) {
+		fprintf(stderr, "In discordant_mapping_MEI a new reverse\n");
 		newEl->orient = REVERSE;
-	else
+	}
+	else {
+		fprintf(stderr, "In discordant_mapping_MEI a new forward\n");
 		newEl->orient = FORWARD;
+	}
 
 	mei_cnt_bam++;
 	newEl->MEI_Type = MEI_Type;

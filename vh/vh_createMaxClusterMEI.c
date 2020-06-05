@@ -64,11 +64,13 @@ int addToGenomeIndex_MEI (bam_info** in_bams, parameters *params, char *chromoso
 
 						if (discordantReadPtr->orient == FORWARD)
 						{
+							fprintf(stderr, "In addToGenomeIndex_MEI a new forward\n");
 							tmpMEI_Reads->next = mReads[discordantReadPtr->pos_End];
 							mReads[discordantReadPtr->pos_End] = tmpMEI_Reads;
 						}
 						if (discordantReadPtr->orient == REVERSE)
 						{
+							fprintf(stderr, "In addToGenomeIndex_MEI a new reverse\n");
 							tmp = max( 0, discordantReadPtr->pos - in_bams[numSample]->libraries[count]->conc_max);
 							tmpMEI_Reads->next = mReads[tmp];
 							mReads[tmp] = tmpMEI_Reads;
