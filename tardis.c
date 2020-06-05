@@ -132,6 +132,7 @@ int main( int argc, char** argv)
 
 	   		// loop through the string to extract all other tokens
 			while( token != NULL ) {
+				tokens[i] = NULL;
 				set_str( &(tokens[i]), token);
 
 				// if(k==10) {
