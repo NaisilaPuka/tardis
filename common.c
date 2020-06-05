@@ -15,7 +15,7 @@ long long memUsage = 0;
 int running_mode = QUICK;
 int ten_x_flag = 0;
 int output_hs_flag = 0;
-int debug_mode = 1;
+int debug_mode = 0;
 int cluster_of_reads;
 
 void init_params( parameters** params)

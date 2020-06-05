@@ -1053,20 +1053,15 @@ void bamonly_vh_clustering( bam_info** in_bams, exon_info*** in_exons, parameter
 		/* Mei */
 		
 			fprintf( stderr, "\nPreparing MEI clusterss");
-			int a = initializeReadMapping_MEI( in_bams, params, chr_index);
-			if(a == 0)
-				fprintf( stderr, "\nHELLO QUICK\n");
-			else if (a == -1)
-				fprintf( stderr, "\nHELLO SENSITIVE\n");
-			fprintf( stderr, "\na is %d\n", a);
+			initializeReadMapping_MEI( in_bams, params, chr_index);
 			fprintf( stderr, "..");
-			//fflush( stderr);
+			fflush( stderr);
 			MEICluster_Region( params, chr_index);
 			fprintf( stderr, "..");
-			//fflush( stderr);
+			fflush( stderr);
 			vh_finalizeReadMapping_Mei( params->this_sonic->chromosome_lengths[chr_index]);
 			fprintf( stderr, "..");
-			//fflush( stderr);
+			fflush( stderr);
 
 		// /* NumT */
 		// if( ( strcmp( params->this_sonic->chromosome_names[chr_index], "MT") != 0)

@@ -22,30 +22,20 @@ int addToGenomeIndex_MEI (bam_info** in_bams, parameters *params, char *chromoso
 	sonic_repeat *mei;
 	int libId = 0;
 
-	fprintf(stderr, "ENTER HERE in outside loops\n");
 	for( numSample = 0; numSample < params->num_bams; numSample++)
 	{
-		fprintf(stderr, "ENTER HERE in outer outer loop\n");
 		for( count = 0; count < in_bams[numSample]->num_libraries; count++)
 		{
 			discordantReadPtr = in_bams[numSample]->libraries[count]->listMEI_Mapping;
 			softClipPtr = in_bams[numSample]->libraries[count]->listSoftClip;
-			fprintf(stderr, "ENTER HERE in outer loop\n");
 			while( discordantReadPtr != NULL)
 			{
-				fprintf(stderr, "ENTER HERE in inner loop\n");
-				if(strcmp( discordantReadPtr->chromosome_name, chromosome_name) == 0)
-					fprintf(stderr, "Chromosome names are same here\n");
-				if(( discordantReadPtr->pos > 0))
-					fprintf(stderr, "discordantReadPtr->pos > 0 here\n");
-				if(discordantReadPtr->pos_End < chroSize)
-					fprintf(stderr, "discordantReadPtr->pos_End < chroSize here\n");
-				//is_satellite = sonic_is_satellite (params->this_sonic, discordantReadPtr->chromosome_name, discordantReadPtr->pos, discordantReadPtr->pos_End);
-				is_satellite = 0;
+				is_satellite = sonic_is_satellite (params->this_sonic, discordantReadPtr->chromosome_name, discordantReadPtr->pos, discordantReadPtr->pos_End);
+				if(is_satellite == 0)
+					fprintf(stderr, "satellite is zero here\n");
 				if( is_satellite == 0 && strcmp( discordantReadPtr->chromosome_name, chromosome_name) == 0
 						&& ( discordantReadPtr->pos > 0) && ( discordantReadPtr->pos_End < chroSize))
 				{
-					fprintf(stderr, "ENTER HERE\n");
 					if( discordantReadPtr->MEI_Type > -1)
 					{
 						tmpMEI_Reads = (mei_Reads*) getMem( sizeof( mei_Reads));
@@ -76,13 +66,11 @@ int addToGenomeIndex_MEI (bam_info** in_bams, parameters *params, char *chromoso
 
 						if (discordantReadPtr->orient == FORWARD)
 						{
-							fprintf(stderr, "In addToGenomeIndex_MEI a new forward\n");
 							tmpMEI_Reads->next = mReads[discordantReadPtr->pos_End];
 							mReads[discordantReadPtr->pos_End] = tmpMEI_Reads;
 						}
 						if (discordantReadPtr->orient == REVERSE)
 						{
-							fprintf(stderr, "In addToGenomeIndex_MEI a new reverse\n");
 							tmp = max( 0, discordantReadPtr->pos - in_bams[numSample]->libraries[count]->conc_max);
 							tmpMEI_Reads->next = mReads[tmp];
 							mReads[tmp] = tmpMEI_Reads;
@@ -356,14 +344,12 @@ void outputMEIClusters( parameters* params, char* chromosome_name)
 			/* Count the number of MEIs in H_F that matches the MEIType */
 			for( count = 0; count < H_F->heapSize; count++)
 			{
-				fprintf( stderr, "\nH_F->heapArray[count].mei_ReadsPtr->MEI_Type: %d\n", H_F->heapArray[count].mei_ReadsPtr->MEI_Type);
 				if( H_F->heapArray[count].mei_ReadsPtr->MEI_Type == MEIType)
 					F_count++;
 			}
 			/* Count the number of MEIs in H_R that matches the MEIType2 */
 			for( count = 0; count < H_R->heapSize; count++)
 			{
-				fprintf( stderr, "\nH_R->heapArray[count].mei_ReadsPtr->MEI_Type: %d\n", H_R->heapArray[count].mei_ReadsPtr->MEI_Type);
 				if( H_R->heapArray[count].mei_ReadsPtr->MEI_Type == MEIType2)
 					R_count++;
 			}
@@ -612,7 +598,6 @@ void outputMEIClusters( parameters* params, char* chromosome_name)
 
 void MEICluster_Region( parameters* params, int chr_index)
 {
-	fprintf(stderr, "\nHELLO FROM MEICluster_Region\n");
 	int leftBreakPoint;
 	int boolMEITypeNewAdded = 0; // 0 or 1 indicates an new insertion of one of the 6 different types of MEI
 	int boolMEITypeNewRemoved = 0; // 0 or 1 indicates a new deletion of one of the 6 different types of MEI
@@ -665,7 +650,6 @@ void vh_freeLinkedListMEI( mei_Reads * cur)
 
 void vh_finalizeReadMapping_Mei( int chroSize)
 {
-	fprintf(stderr, "\nHELLO FROM vh_finalizeReadMapping_Mei\n");
 	int i;
 	mei_Reads *ptr, *ptrNext;
 	for( i = 0; i < chroSize; i++)
@@ -747,19 +731,15 @@ int mei_regions( parameters *params, char* chromosome_name)
 }
 
 
-int initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_index)
+void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_index)
 {
-	int a;
-	fprintf(stderr, "pASSED THIS -1\n");
 	int i, mei_count;
 
 	mReads = (mei_Reads **) getMem( params->this_sonic->chromosome_lengths[chr_index] * sizeof( mei_Reads *));
 
-	fprintf(stderr, "pASSED THIS 0\n");
 	if( mReads == NULL)
 		vh_logWarning ("Memory Problem in vh_createMaxClusterMEI");
 
-	fprintf(stderr, "pASSED THIS 1\n");
 	for( i = 0; i < params->this_sonic->chromosome_lengths[chr_index]; i++)
 		mReads[i] = NULL;
 
@@ -767,20 +747,14 @@ int initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_i
 	H_R = vh_newHeapMEI(MAX_CLUSTER_SIZE);
 	H_S = vh_newHeapMEI(MAX_CLUSTER_SIZE);
 
-	if( running_mode == QUICK) {
-		a = 0;
-		fprintf(stderr, "HERE IN QUICK MODE\n");
+	if( running_mode == QUICK)
 		mei_count = addToGenomeIndex_MEI( in_bams, params, params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
-	}
 	else
 	{
-		a = -1;
-		fprintf(stderr, "HERE IN SENSITIVE MODE\n");
 		/* find the MEI sites */
 		mei_count = mei_regions( params, params->this_sonic->chromosome_names[chr_index]);
 		fprintf(logFile,"MEI regions count= %d\t", mei_count);
 		mei_count = addToGenomeIndex_MEI_sensitive( params, params->this_sonic->chromosome_names[chr_index], params->this_sonic->chromosome_lengths[chr_index]);
 		fprintf(logFile,"%d MEI in clusters\n", mei_count);
 	}
-	return a;
 }

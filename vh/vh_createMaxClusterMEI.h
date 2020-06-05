@@ -33,7 +33,7 @@ typedef struct mei_Reads{
 	struct mei_Reads *next;
 } mei_Reads;
 
-int initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_index);
+void initializeReadMapping_MEI( bam_info** in_bams, parameters *params, int chr_index);
 void MEICluster_Region( parameters* params, int chr_index);
 void vh_finalizeReadMapping_Mei( int chroSize);
 
